@@ -1,0 +1,91 @@
+ <widget id="A6157104583791"  version="0.0.1">
+    <name>MonkeyPi</name>
+    <description>        Example For Kyour.    </description>
+    <author email="kyour@vip.qq.com" href="http://www.kyour.cn">
+        Developer    </author>
+    <!-- 启动页 -->
+    <content src="index.html" />
+
+    <!-- 允许访问api的页面 -->
+    <access origin="*" />
+
+    <!-- 配置页面是否弹动 -->
+    <preference name="pageBounce" value="false"/>
+
+    <!-- 全局背景色 -->
+	<preference name="appBackground" value="#fff"/>
+
+	<preference name="windowBackground" value="#fff"/>
+
+	<preference name="frameBackgroundColor" value="rgba(0,0,0,0)"/>
+
+    <!-- 是否显示竖向滚动条 -->
+	<preference name="hScrollBarEnabled" value="false"/>
+
+    <!-- 是否显示横向滚动条 -->
+	<preference name="vScrollBarEnabled" value="false"/>
+
+    <!-- 是否自动关闭启动图 -->
+	<preference name="autoLaunch" value="true"/>
+
+    <!-- 是否全屏显示app -->
+	<preference name="fullScreen" value="false"/>
+
+    <!-- 是否自动检查更新 -->
+	<preference name="autoUpdate" value="true" />
+
+    <!-- 配置应用是否支持增量更新、云修复 -->
+	<preference name="smartUpdate" value="true" />
+
+    <!-- 配置应用开启/关闭调试模式 -->
+	<!-- <preference name="debug" value="false"/> -->
+
+    <!-- 配置状态栏和页面是否重合（沉浸式效果） -->
+	<preference name="statusBarAppearance" value="true"/>
+
+    <!-- 权限：读取手机状态和身份 -->
+	<permission name="readPhoneState" />
+
+    <!-- 权限：使用拍照和视频 -->
+	<permission name="camera" />
+
+    <!-- 权限：使用录音 -->
+	<permission name="record" />
+
+    <!-- 权限：访问地理位置信息 -->
+	<permission name="location" />
+
+    <!-- 权限：访问文件系统 -->
+	<permission name="fileSystem" />
+
+    <!-- 权限：完全的访问网络权限 -->
+	<permission name="internet" />
+
+    <!-- 权限：开机启动 -->
+	<permission name="bootCompleted" />
+
+    <!-- 权限：控制振动/闪光灯/屏幕休眠等硬件设备 -->
+	<permission name="hardware" />
+
+    <!-- 使用useWKWebView -->
+    <preference name="useWKWebView" value="true" />
+
+    <!-- 配置后台运行 audio | location -->
+	<preference name="backgroundMode" value="location"/>
+
+    <!-- 当键盘弹出时，输入框被盖住时，当前页面的调整方式 -->
+    <preference name="softInputMode" value="resize"/>
+
+    <!-- 使用原生渲染引擎 -->
+    <preference name="avm" value="true"/>
+
+    <!-- 配置URL Scheme -->
+    <preference name="urlScheme" value="xoshe" />
+
+    <!-- 百度地图模块 -->
+    <feature name="bMap">
+        <param name="android_api_key" value="xSzcjC38Gsm2bA2yFGhEaxZhh32IBFAC" />
+        <param name="ios_api_key" value="81qz3dBYB5q2nGji4IYrawr1" />
+    </feature>
+
+</widget>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<security>
+
+    <!-- 用于APP访问请求头加密 @李世靖 #common.js -->
+    <item name="ApiKey" value="xxx"/>
+
+    <!-- 用于APP数据传输加密秘钥 @李世靖 #common.js -->
+    <item name="encodeKey" value="xxx"/>
+</security>

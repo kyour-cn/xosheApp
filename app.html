@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+
+    <link rel="stylesheet" href="./static/extend/vant/vant.min.css" />
+    <link rel="stylesheet" href="./static/extend/fontawesome/css/all.min.css">
+    <!-- <link rel="stylesheet" href="./static/css/index/main.css"> -->
+
+    <style>
+        .wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #eee;
+        }
+    </style>
+</head>
+<body>
+
+    <section id="v-page">
+    </section>
+
+    <div id="app-view">
+        <van-overlay :show="overlay">
+            <div class="wrapper">
+                <van-loading size="40"></van-loading>
+            </div>
+        </van-overlay>
+
+        <van-overlay :show="adshow">
+            <div style="width: 100%;height: 100%;background: #ddd;display: none;" id="adBox">
+                <div style="width:100%;height:100%;position:absolute;z-index: 100;">
+                    <div style="position:absolute;right: 0.5rem;top:0.5rem;background-color:rgba(150,150,150,0.5);border-radius: 0.4rem;" @click="adshow=false">
+                        <p style="margin:0;padding:0.25rem 0.5rem;">跳过 {{ad.countdown}}</p>
+                    </div>
+                    <img :src="ad.pic" style="width: 100%;">
+                    <div style="position:absolute;bottom: 0;background-color:rgba(150,150,150,0.5);width:100%;padding:0.5rem 1rem 1rem 1rem;">
+                        <van-row>
+                            <van-col span="6">
+                                <img :src="App.href+'static/image/icon.png'" style="width:2.5rem;padding-top:0.5rem;">
+                            </van-col>
+                            <van-col span="18">
+                                <p style="font-size:1.5rem;margin: 0;color:#eaeaea;font-weight:900;">{{ad.title}}</p>
+                                <p style="margin: 0;color:#eaeaea;">{{ad.content}}</p>
+                            </van-col>
+                        </van-row>
+                    </div>
+                </div>
+                <div :style="'width:100%;height:100%;background: url('+ad.bgpic+') no-repeat;z-index: 99;'" class="filter">
+                </div>
+            </div>
+        </van-overlay>
+    </div>
+
+    <script src="./static/extend/js/vue.min.js"></script>
+    <!-- <script src="/static/extend/js/axios.min.js"></script> -->
+    <script src="./static/extend/vant/vant.min.js"></script>
+    <script src="./static/extend/easysocket/easysocket.min.js"></script>
+    <script src="./static/js/app.min.js"></script>
+    <script src="http://xoshe.cn/index/app/script?type=app"></script>
+
+    <script src="./script/supapp.js"></script>
+
+    <script type="text/javascript">
+
+    //应用信息 -App版
+    App.href = 'http://'+ App.host +'/';
+    App.local = './';
+
+    //是否App中运行
+    App.isApp = true;
+
+    //页面vue实例
+    var page = null;
+
+    //导入组件 form vant
+    App.use([
+        'Overlay', 'Button', 'NavBar',
+        'Col', 'Row', 'Empty', 'Icon',
+        'Loading'
+    ], vant);
+
+    App.dom('#adBox').style.display = 'block';
+
+    App.view = new Vue({
+        el: '#app-view',
+        data: {
+            //加载遮罩
+            overlay: true,
+            adshow: true,
+            ad: App.temp.adData
+        },
+        mounted: function(){
+            var _this = this;
+            App.temp.timer = setInterval(function(){
+                _this.ad.countdown --;
+                if(_this.ad.countdown <= 0){
+                    _this.adshow = false;
+                    clearInterval(App.temp.timer);
+                    //广告结束
+                    App.dom('#adBox').innerHTML = '';
+                }
+            }, 1000);
+        }
+    });
+
+    //创建WebSocket
+    App.temp.init = function(){
+        App.es = new EasySocket({
+            url: (document.location.protocol == 'https:' ?
+                'wss://'+App.host+':443' : 'ws://'+App.host)+ '/ws',
+            heart: {
+                cmd: 'index.heart',
+                data: function (){
+                    return {
+                        sessid: App.getCookie('sessionId')
+                    }
+                }
+            },
+            heartSleep: 10,
+            sessionId: localStorage.sessionId,
+            sessionName: 'sessionId',
+            eventKey: 'cmd',
+            reconn: true,
+            debug: false
+        });
+
+        //开始连接WebSocket
+        App.es.init(function(){
+
+            //连接成功 -发送一次心跳
+            App.es.sendHeart();
+
+            //加载新模板页面
+            var url = App.href + 'index/main';
+            App.route.push(url);
+            App.open(url, false);
+
+        });
+
+    };
+
+    //App适配
+    apiready = function(){
+
+        // setTimeout(function(){
+            api.removeLaunchView();
+        // },500);
+
+        api.addEventListener({
+            name:'offline'
+        }, function(ret, err){
+            vant.Toast('网络连接已断开');
+        });
+        api.addEventListener({
+            name:'online'
+        }, function(ret, err){
+            vant.Toast('已连接到网络');
+        });
+
+        api.addEventListener({
+            name:'appintent'
+        },function(ret,err){
+            // alert(JSON.stringify(ret))
+        });
+
+        // api.addEventListener({
+        //     name:'shake'
+        // }, function(ret, err){
+        //    alert('触发了摇一摇事件');
+        // });
+
+        // 从服务器获取sessionId保存
+        api.ajax({
+            url: App.href+ 'index/app/getSessionId',
+            method: 'post'
+        },function(ret, err){
+            if (ret) {
+                if(ret.code === 0){
+                    localStorage.sessionId = ret.result.sid;
+                    App.temp.init();
+                    delete App.temp.init;
+                }
+            } else {
+                alert('服务器连接发生错误');
+            }
+        });
+
+        api.addEventListener({
+            name: 'goBack'
+        }, function(ret, err) {
+            //为false则退出
+            if(!App.goBack()){
+                var curSecond = (new Date().getTime()) / 1000;
+                if(typeof App.backSecond == 'undefined'){
+                    App.backSecond = 0;
+                }
+                if (Math.abs(curSecond - App.backSecond) > 2) {
+                    App.backSecond = curSecond;
+                    vant.Toast('再按一次退出应用');
+                } else {
+                    // //返回到系统桌面
+                    api.toLauncher();
+                }
+            }
+
+        });
+    }
+
+    </script>
+</body>
+</html>

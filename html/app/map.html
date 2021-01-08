@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+
+    <link rel="stylesheet" href="../../static/extend/vant/vant.min.css" />
+</head>
+<body>
+    <section id="app">
+        <div :style="'padding-top:'+localStorage.safeAreaTop+'px'"></div>
+
+        <van-nav-bar
+            id="nav-bar"
+            title="登录"
+            left-text="返回"
+            left-arrow
+            @click-left="onClickLeft"
+        ></van-nav-bar>
+
+        <div>
+            地图显示111
+
+        </div>
+    </section>
+
+    <script src="../../static/extend/js/vue.min.js"></script>
+    <script src="../../static/extend/vant/vant.min.js"></script>
+    <script src="../../static/js/app.min.js"></script>
+
+    <script type="text/javascript">
+
+    //导入组件 form vant
+    App.use(['NavBar'], vant);
+
+    var header_y = 46 + Number(localStorage.safeAreaTop);
+
+    var VmParam = {
+        el: '#app',
+        data: {
+        },
+        methods: {
+            onClickLeft: function(){
+                alert(1)
+            },
+        },
+        mounted: function(){
+        }
+    };
+    var vm;
+
+    apiready = function() {
+
+        var map = api.require('bMap');
+        map.open({
+            rect: {
+                x: 0,
+                y: header_y,
+                w: api.winWidth,
+                h: 300
+            },
+            center: {
+                lon: 116.4021310000,
+                lat: 39.9994480000
+            },
+            zoomLevel: 10,
+            showUserLocation: true,
+            fixedOn: api.frameName,
+            fixed: true
+        }, function(ret) {
+            if (ret.status) {
+                alert('地图打开成功');
+            }
+        });
+
+        vm = new Vue(VmParam);
+
+    }
+
+
+    </script>
+</body>
+</html>

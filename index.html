@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>Hello APP</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <style type="text/css">
+    html{
+        background-color: #fff;
+    }
+    </style>
+</head>
+
+<body>
+</body>
+<script type="text/javascript">
+
+    apiready = function(){
+
+        //动态权限申请
+        api.requestPermission({
+            list: ['camera','microphone','location','locationAlways','notification','storage'],
+            code: 1
+        }, function(ret, err){
+            // api.alert({
+            //     msg:JSON.stringify(ret)
+            // });
+        });
+
+        api.setStatusBarStyle({
+            style: 'dark'
+        });
+
+        //监听设置状态栏颜色
+        api.addEventListener({
+            name: 'setStatusBarBgColor'
+        }, function(ret, err) {
+            var html_el = document.querySelector('html');
+            html_el.style.backgroundColor = ret.value.color;
+            // alert(JSON.stringify(ret));
+        });
+
+        // api.clearCache(function() {
+            // console.log(111)
+            // api.rebootApp();
+        // });
+
+        var fs = api.require('fs');
+        //创建临时目录
+        fs.createDir({
+            path: 'fs://tmp'
+        }, function(ret, err) {
+        });
+
+        //监听返回
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            api.sendEvent({
+                name: 'goBack'
+            });
+        });
+
+        //缓存顶部距离
+        localStorage.safeAreaTop = api.safeArea.top;
+
+        api.openFrame({
+            name: 'web',
+            // url: 'http://mk.kyour.cn',
+            url: './app.html',
+            bgColor: '#fff',
+            animation: {
+                type: "fade",                //动画类型（详见动画类型常量）
+                // subType: "from_right",       //动画子类型（详见动画子类型常量）
+                duration: 150                //动画过渡时间，默认300毫秒
+            },
+            rect: {
+                x: 0,
+                y: api.safeArea.top,
+                w: 'auto',
+                h: api.winHeight - api.safeArea.top
+            }
+        });
+    }
+
+</script>
+</html>

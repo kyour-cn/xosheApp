@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+
+    <link rel="stylesheet" href="../../static/extend/vant/vant.min.css" />
+</head>
+<body>
+    <section id="app">
+    </section>
+
+    <script src="../../static/extend/js/vue.min.js"></script>
+    <script src="../../static/extend/vant/vant.min.js"></script>
+    <script src="../../static/js/app.min.js"></script>
+    <script src="http://xoshe.cn/index/app/script"></script>
+
+    <script type="text/javascript">
+
+    //导入组件 form vant
+    // App.use(['NavBar'], vant);
+
+    //应用信息 -App版
+    App.href = 'http://'+ App.host +'/';
+    App.local = '../../';
+
+    //是否App中运行
+    App.isApp = true;
+
+    // var VmParam = {
+    //     el: '#app',
+    //     data: {
+    //     },
+    //     methods: {
+    //         onClickLeft: function(){
+    //             alert(1)
+    //         },
+    //     },
+    //     mounted: function(){
+    //     }
+    // };
+    // var vm;
+
+    apiready = function() {
+
+        // vm = new Vue(VmParam);
+        // console.log(JSON.stringify(api.pageParam));
+        // alert(JSON.stringify(api.pageParam))
+
+        // App.dom('#app').style.paddingTop = api.safeArea.top + 'px';
+
+        App.load('#app', App.href + api.pageParam.url);
+
+    }
+
+    </script>
+</body>
+</html>
